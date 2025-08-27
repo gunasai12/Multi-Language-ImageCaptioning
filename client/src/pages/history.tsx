@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 import NavigationHeader from "@/components/navigation-header";
 import HistoryGrid from "@/components/history-grid";
 import { Input } from "@/components/ui/input";
@@ -37,7 +40,20 @@ export default function History() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Caption History</h1>
+            <div className="flex items-center gap-4 mb-4">
+              <Link href="/">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="glass hover:bg-white/10 transition-all duration-300 group"
+                  data-testid="button-back-home"
+                >
+                  <ArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform" size={16} />
+                  Back to Dashboard
+                </Button>
+              </Link>
+            </div>
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">Caption History</h1>
             <p className="text-muted-foreground">Browse through your previously uploaded images and generated captions</p>
           </div>
 
