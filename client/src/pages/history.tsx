@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import NavigationHeader from "@/components/navigation-header";
 import HistoryGrid from "@/components/history-grid";
+import SupportChatbot from "@/components/support-chatbot";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -83,6 +84,9 @@ export default function History() {
           <HistoryGrid />
         </div>
       </main>
+
+      {/* Support Chatbot */}
+      <SupportChatbot />
     </div>
   );
 }

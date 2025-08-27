@@ -5,6 +5,7 @@ import NavigationHeader from "@/components/navigation-header";
 import ImageUpload from "@/components/image-upload";
 import CaptionResults from "@/components/caption-results";
 import RecentActivitySidebar from "@/components/recent-activity-sidebar";
+import SupportChatbot from "@/components/support-chatbot";
 
 export default function Dashboard() {
   const { toast } = useToast();
@@ -79,6 +80,9 @@ export default function Dashboard() {
         {/* Recent Activity Sidebar */}
         <RecentActivitySidebar />
       </div>
+
+      {/* Support Chatbot */}
+      <SupportChatbot />
     </div>
   );
 }
