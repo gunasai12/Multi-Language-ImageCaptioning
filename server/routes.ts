@@ -150,6 +150,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete specific image
+  app.delete('/api/images/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const imageId = req.params.id;
+      
+      const image = await storage.getImageById(imageId);
+      
+      if (!image) {
+        return res.status(404).json({ message: "Image not found" });
+      }
+
+      // Ensure user can only delete their own images
+      if (image.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      // Delete the file from filesystem
+      const filePath = path.join(uploadDir, image.filename);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+
+      // Delete from database
+      const deleted = await storage.deleteImage(imageId);
+      
+      if (deleted) {
+        res.json({ message: "Image deleted successfully" });
+      } else {
+        res.status(500).json({ message: "Failed to delete image" });
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      res.status(500).json({ message: "Failed to delete image" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

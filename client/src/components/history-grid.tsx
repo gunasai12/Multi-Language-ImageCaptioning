@@ -1,17 +1,53 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Download } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Download, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { apiRequest } from "@/lib/queryClient";
 import type { Image } from "@shared/schema";
 
 export default function HistoryGrid() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: images, isLoading, error } = useQuery<Image[]>({
     queryKey: ['/api/images'],
     retry: false,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (imageId: string) => {
+      await apiRequest(`/api/images/${imageId}`, {
+        method: 'DELETE',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/images'] });
+      toast({
+        title: "Success",
+        description: "Image and captions deleted successfully",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to delete image. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   if (error && isUnauthorizedError(error)) {
@@ -127,14 +163,67 @@ ${image.captionHindi}`;
               >
                 View Details
               </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => downloadCaptions(image)}
-                data-testid={`button-download-${image.id}`}
-              >
-                <Download size={16} />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => downloadCaptions(image)}
+                  data-testid={`button-download-${image.id}`}
+                  className="hover:bg-blue-50 hover:text-blue-600"
+                >
+                  <Download size={16} />
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      data-testid={`button-delete-${image.id}`}
+                      className="hover:bg-red-50 hover:text-red-600"
+                      disabled={deleteMutation.isPending}
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="glass border-2 border-white/20">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                        Delete Image
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="text-muted-foreground text-base">
+                        Are you sure you want to delete this image and all its captions? This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="my-4 glass rounded-lg p-3 border border-white/20">
+                      <img 
+                        src={image.imageUrl} 
+                        alt={image.originalName}
+                        className="w-full h-32 object-cover rounded mb-2"
+                      />
+                      <p className="text-sm font-medium text-foreground">{image.originalName}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Uploaded: {new Date(image.createdAt!).toLocaleString()}
+                      </p>
+                    </div>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel 
+                        className="glass border border-white/20 hover:bg-white/10"
+                        data-testid={`button-cancel-delete-${image.id}`}
+                      >
+                        Cancel
+                      </AlertDialogCancel>
+                      <AlertDialogAction 
+                        className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
+                        onClick={() => deleteMutation.mutate(image.id)}
+                        data-testid={`button-confirm-delete-${image.id}`}
+                        disabled={deleteMutation.isPending}
+                      >
+                        {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
           </div>
         </div>
