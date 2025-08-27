@@ -106,11 +106,14 @@ export default function ImageUpload() {
   };
 
   return (
-    <Card className="border-border">
-      <CardContent className="p-6">
-        <h2 className="text-xl font-semibold mb-4">Upload Image</h2>
+    <Card className="glass border-2 border-white/20 shadow-xl">
+      <CardContent className="p-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">Upload Image</h2>
+        </div>
         <div 
-          className={`upload-zone rounded-lg p-8 text-center cursor-pointer transition-all duration-300 ${
+          className={`upload-zone rounded-2xl p-12 text-center cursor-pointer ${
             dragOver ? 'dragover' : ''
           } ${uploadMutation.isPending ? 'pointer-events-none opacity-50' : ''}`}
           onDragOver={handleDragOver}
@@ -119,22 +122,22 @@ export default function ImageUpload() {
           onClick={() => document.getElementById('file-input')?.click()}
           data-testid="zone-upload"
         >
-          <div className="space-y-4">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto">
+          <div className="space-y-6">
+            <div className="w-20 h-20 glass rounded-full flex items-center justify-center mx-auto pulse-glow">
               {uploadMutation.isPending ? (
-                <Loader2 className="text-2xl text-muted-foreground animate-spin" size={32} />
+                <Loader2 className="text-blue-600 animate-spin" size={36} />
               ) : (
-                <CloudUpload className="text-2xl text-muted-foreground" size={32} />
+                <CloudUpload className="text-blue-600" size={36} />
               )}
             </div>
-            <div>
-              <p className="text-lg font-medium">
+            <div className="space-y-3">
+              <p className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                 {uploadMutation.isPending 
                   ? "Processing your image..." 
                   : "Drop your image here or click to browse"
                 }
               </p>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-muted-foreground text-lg">
                 {uploadMutation.isPending 
                   ? "Generating captions in multiple languages..."
                   : "Supports JPG, PNG, GIF up to 10MB"
@@ -142,7 +145,7 @@ export default function ImageUpload() {
               </p>
             </div>
             {!uploadMutation.isPending && (
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                 Select Image
               </Button>
             )}

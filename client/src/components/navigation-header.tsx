@@ -10,14 +10,16 @@ export default function NavigationHeader() {
   };
 
   return (
-    <header className="bg-card border-b border-border px-6 py-4">
+    <header className="glass border-b border-white/20 px-6 py-4 backdrop-blur-xl">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Languages className="text-sm text-primary-foreground" size={16} />
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg pulse-glow">
+              <Languages className="text-white" size={20} />
             </div>
-            <span className="font-semibold text-lg">MultiLang Caption</span>
+            <span className="font-bold text-xl bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              MultiLang Caption
+            </span>
           </div>
         </div>
         <nav className="flex items-center space-x-2">
@@ -25,6 +27,11 @@ export default function NavigationHeader() {
             <Button 
               variant={location === "/" ? "default" : "ghost"} 
               size="sm"
+              className={`nav-item transition-all duration-300 ${
+                location === "/" 
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg" 
+                  : "hover:bg-white/10"
+              }`}
               data-testid="link-dashboard"
             >
               <Home className="mr-2" size={16} />
@@ -35,6 +42,11 @@ export default function NavigationHeader() {
             <Button 
               variant={location === "/history" ? "default" : "ghost"} 
               size="sm"
+              className={`nav-item transition-all duration-300 ${
+                location === "/history" 
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg" 
+                  : "hover:bg-white/10"
+              }`}
               data-testid="link-history"
             >
               <History className="mr-2" size={16} />
@@ -45,7 +57,7 @@ export default function NavigationHeader() {
             variant="ghost" 
             size="sm" 
             onClick={handleLogout}
-            className="text-destructive hover:text-destructive"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-300"
             data-testid="button-logout"
           >
             <LogOut className="mr-2" size={16} />
