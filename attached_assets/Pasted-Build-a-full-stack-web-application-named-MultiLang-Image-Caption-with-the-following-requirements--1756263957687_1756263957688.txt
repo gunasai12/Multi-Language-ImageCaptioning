@@ -1,0 +1,103 @@
+Build a full-stack web application named “MultiLang Image Caption” with the following requirements:
+
+Theme & UI
+
+Keep the interface minimal, simple, and intuitive.
+
+Use 21st.dev components for a modern design.
+
+Main pages:
+
+Login Page
+
+Signup Page
+
+Dashboard / Home: upload image, see captions, chat history.
+
+Chat History Page: list of previously uploaded images and generated captions.
+
+Frontend
+
+Framework: React.js + Tailwind CSS.
+
+Pages/components:
+
+Login: email/password login, simple validation.
+
+Signup: email/password signup, validation.
+
+Dashboard:
+
+Upload image button (drag-and-drop optional).
+
+Display generated captions in Telugu, Hindi, and English.
+
+Chat history sidebar showing previous uploads with timestamps.
+
+Navbar: links to Dashboard, History, Logout.
+
+Backend
+
+Framework: Node.js + Express.js.
+
+API endpoints:
+
+POST /signup: register user.
+
+POST /login: login user and return JWT token.
+
+POST /upload-image: accept image, generate captions in Telugu, Hindi, English, store in database with user ID.
+
+GET /chat-history: return previous uploaded images with captions for logged-in user.
+
+Authentication: JWT-based for secure access.
+
+Image Captioning
+
+Do NOT use traditional OCR.
+
+Use a pretrained image-captioning AI model (like OpenAI’s GPT-4 vision or Hugging Face BLIP model).
+
+Model should return descriptive captions in English, then translate captions to Telugu and Hindi using a translation API (like Google Translate API).
+
+Database
+
+Database: MongoDB (Atlas or local).
+
+Collections:
+
+users: id, email, hashed_password, created_at
+
+images: id, user_id, image_url, captions {english, telugu, hindi}, timestamp
+
+Storage
+
+Use local file storage or cloud storage (S3 / Cloudinary) for uploaded images.
+
+Chat History
+
+Show a list of previously uploaded images with their generated captions.
+
+Allow clicking an image to see full details.
+
+Testing
+
+Include unit tests and integration tests for all backend endpoints using Jest + Supertest.
+
+Frontend: test main components with React Testing Library.
+
+Additional Requirements
+
+Responsive design (desktop and mobile).
+
+Simple, clean navigation.
+
+Minimal dependencies for simplicity and maintainability.
+
+Include README.md with setup instructions.
+
+Deliverables
+
+Fully functional frontend, backend, database, image captioning integration, authentication, chat history, testing suite.
+
+All code should be structured and ready to run on Replit.
