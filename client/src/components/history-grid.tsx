@@ -19,9 +19,18 @@ export default function HistoryGrid() {
 
   const deleteMutation = useMutation({
     mutationFn: async (imageId: string) => {
-      await apiRequest(`/api/images/${imageId}`, {
+      const response = await fetch(`/api/images/${imageId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+      
+      if (!response.ok) {
+        throw new Error(`${response.status}: ${response.statusText}`);
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/images'] });
